@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RoseBakery Manager — Freshly Baked. Perfectly Managed.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+/* ══ DESIGN TOKENS ════════════════════════════════════════════ */
+:root {
+  /* Core palette */
+  --rose-50:   #fdf1f3;
+  --rose-100:  #fce4e9;
+  --rose-200:  #f9c6d0;
+  --rose-300:  #f39aab;
+  --rose-400:  #ea6f85;
+  --rose-500:  #d94d65;
+  --rose-600:  #c13554;
+
+  --cream:     #fdf8f2;
+  --vanilla:   #faf3e7;
+  --ivory:     #f7f2ea;
+  --beige:     #ede5d8;
+  --beige-d:   #e0d5c4;
+
+  --brown-100: #f0e6d8;
+  --brown-200: #ddc9ae;
+  --brown-300: #c4a882;
+  --brown-400: #a07850;
+  --brown-500: #7c5535;
+  --brown-600: #5c3c22;
+
+  --gold-100:  #fdf4d8;
+  --gold-200:  #f9e4a0;
+  --gold-300:  #f0c83a;
+  --gold-400:  #d4a017;
+  --gold-500:  #a87c0d;
+
+  --sage-100:  #e8f0e6;
+  --sage-300:  #8fa88b;
+  --sage-500:  #5a7855;
+
+  --gray-50:   #fafafa;
+  --gray-100:  #f4f4f4;
+  --gray-200:  #e8e8e8;
+  --gray-300:  #d0d0d0;
+  --gray-400:  #a8a8a8;
+  --gray-500:  #787878;
+  --gray-700:  #444444;
+  --gray-900:  #1c1c1c;
+  --white:     #ffffff;
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-mono:    'DM Mono', 'Courier New', monospace;
+
+  /* Radii */
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   16px;
+  --r-xl:   22px;
+  --r-pill: 999px;
+
+  /* Shadows */
+  --sh-xs: 0 1px 3px rgba(120,60,30,.05);
+  --sh-sm: 0 2px 8px rgba(120,60,30,.07);
+  --sh-md: 0 4px 20px rgba(120,60,30,.09);
+  --sh-lg: 0 8px 32px rgba(120,60,30,.12);
+
+  /* Layout */
+  --nav-h:     60px;
+  --sidebar-w: 220px;
+  --t: 200ms cubic-bezier(.4,0,.2,1);
+}
+
+/* ══ RESET ════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-body);
+  font-size:14px;
+  line-height:1.6;
+  color:var(--gray-700);
+  background:var(--cream);
+  -webkit-font-smoothing:antialiased;
+}
+a{text-decoration:none;color:inherit;}
+ul,ol{list-style:none;}
+button{border:none;background:none;cursor:pointer;font-family:inherit;}
+input{font-family:inherit;outline:none;border:none;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--brown-200);border-radius:99px;}
+
+/* ══ TOP NAV ══════════════════════════════════════════════════ */
+.topnav{
+  position:sticky;top:0;z-index:200;
+  height:var(--nav-h);
+  background:rgba(253,248,242,.94);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--beige);
+  display:flex;align-items:center;
+  padding:0 24px;gap:0;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  min-width:var(--sidebar-w);padding-right:16px;
+}
+.logo-icon{
+  width:30px;height:30px;
+  background:linear-gradient(135deg,var(--rose-300),var(--rose-500));
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:13px;
+  box-shadow:0 2px 8px rgba(210,77,101,.3);
+  flex-shrink:0;
+}
+.logo-name{
+  font-family:var(--font-display);
+  font-size:19px;font-weight:600;
+  color:var(--gray-900);letter-spacing:.3px;
+  line-height:1;
+}
+.logo-name em{font-style:italic;color:var(--rose-500);}
+.logo-tagline{
+  font-size:9.5px;font-weight:500;
+  letter-spacing:.8px;text-transform:uppercase;
+  color:var(--brown-300);margin-top:1px;
+}
+
+.nav-links{
+  display:flex;align-items:center;gap:1px;flex:1;
+}
+.nav-links a{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:var(--r-md);
+  font-size:13px;font-weight:450;
+  color:var(--gray-500);
+  transition:background var(--t),color var(--t);
+  white-space:nowrap;
+}
+.nav-links a i{font-size:12px;}
+.nav-links a:hover{color:var(--gray-900);background:var(--beige);}
+.nav-links a.active{color:var(--rose-500);background:var(--rose-50);font-weight:500;}
+
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.nav-search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--ivory);border:1.5px solid var(--beige-d);
+  border-radius:var(--r-pill);padding:6px 14px;
+  transition:border-color var(--t),background var(--t);
+}
+.nav-search:focus-within{border-color:var(--rose-300);background:#fff;}
+.nav-search i{color:var(--gray-400);font-size:12px;}
+.nav-search input{background:none;width:155px;font-size:13px;color:var(--gray-700);}
+.nav-search input::placeholder{color:var(--gray-300);}
+.icon-btn{
+  width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:var(--r-md);color:var(--gray-500);
+  position:relative;
+  transition:background var(--t),color var(--t);
+}
+.icon-btn:hover{background:var(--beige);color:var(--gray-900);}
+.notif-dot{
+  position:absolute;top:5px;right:5px;
+  width:7px;height:7px;
+  background:var(--rose-500);border-radius:50%;
+  border:2px solid var(--cream);
+}
+.av-btn{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--rose-200),var(--rose-400));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.5px;
+  cursor:pointer;border:2px solid #fff;
+  box-shadow:var(--sh-sm);
+  transition:box-shadow var(--t);
+}
+.av-btn:hover{box-shadow:var(--sh-md);}
+
+/* ══ LAYOUT ═══════════════════════════════════════════════════ */
+.layout{
+  display:grid;
+  grid-template-columns:var(--sidebar-w) 1fr;
+  align-items:start;
+  min-height:calc(100vh - var(--nav-h));
+}
+
+/* ══ SIDEBAR ══════════════════════════════════════════════════ */
+.sidebar{
+  position:sticky;top:var(--nav-h);
+  height:calc(100vh - var(--nav-h));
+  overflow-y:auto;
+  background:var(--white);
+  border-right:1px solid var(--beige);
+  padding:18px 12px 28px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.sb-label{
+  font-size:9.5px;font-weight:700;
+  letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--gray-300);padding:12px 8px 4px;
+}
+.sb-link{
+  display:flex;align-items:center;gap:9px;
+  padding:7px 10px;border-radius:var(--r-md);
+  font-size:13px;font-weight:450;
+  color:var(--gray-500);cursor:pointer;
+  transition:background var(--t),color var(--t);
+}
+.sb-link i{font-size:12px;width:15px;text-align:center;}
+.sb-link:hover{background:var(--vanilla);color:var(--gray-900);}
+.sb-link.active{background:var(--rose-50);color:var(--rose-500);font-weight:500;}
+.sb-link .pill{
+  margin-left:auto;font-size:10.5px;
+  background:var(--rose-100);color:var(--rose-500);
+  padding:1px 7px;border-radius:99px;font-weight:600;
+}
+.sb-link .pill.amber{background:var(--gold-100);color:var(--gold-500);}
+.sb-link .pill.green{background:var(--sage-100);color:var(--sage-500);}
+
+/* ══ MAIN ═════════════════════════════════════════════════════ */
+.main{
+  padding:26px 26px 40px;
+  display:flex;flex-direction:column;gap:26px;
+  min-width:0;
+}
+
+/* ══ HEADER BANNER ════════════════════════════════════════════ */
+.hbanner{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:20px;align-items:start;
+}
+.greet-eyebrow{
+  font-size:11px;font-weight:600;
+  letter-spacing:.9px;text-transform:uppercase;
+  color:var(--brown-300);margin-bottom:4px;
+}
+.greet-name{
+  font-family:var(--font-display);
+  font-size:29px;font-weight:600;
+  color:var(--gray-900);line-height:1.2;margin-bottom:5px;
+}
+.greet-sub{font-size:13px;color:var(--gray-400);}
+.greet-sub strong{color:var(--rose-500);font-weight:500;}
+
+.overview-card{
+  background:linear-gradient(140deg,#fff8f2 0%,#fceef2 55%,#fff5e8 100%);
+  border:1.5px solid var(--rose-100);
+  border-radius:var(--r-xl);
+  padding:18px 20px;
+  min-width:290px;max-width:330px;
+  box-shadow:var(--sh-md);
+  position:relative;overflow:hidden;
+}
+.overview-card::before{
+  content:'';position:absolute;
+  top:-24px;right:-24px;
+  width:90px;height:90px;
+  background:radial-gradient(circle,rgba(210,77,101,.12),transparent 70%);
+  border-radius:50%;
+}
+.ov-eyebrow{
+  font-size:10px;font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;
+  color:var(--brown-300);margin-bottom:12px;
+}
+.ov-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.ov-item .label{font-size:10.5px;color:var(--gray-400);margin-bottom:2px;}
+.ov-item .value{
+  font-size:20px;font-weight:600;
+  color:var(--gray-900);letter-spacing:-.5px;line-height:1;
+}
+.ov-item .value.pink{color:var(--rose-500);}
+.ov-item .value.brown{color:var(--brown-400);}
+.ov-item .sub{font-size:11px;color:var(--gray-400);margin-top:1px;}
+.ov-divider{
+  grid-column:1/-1;
+  height:1px;background:rgba(210,77,101,.1);margin:2px 0;
+}
+.shift-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11.5px;font-weight:500;
+  background:rgba(210,77,101,.1);color:var(--rose-500);
+  padding:3px 10px;border-radius:var(--r-pill);
+}
+
+/* ══ SECTION HEADER ═══════════════════════════════════════════ */
+.sec-hdr{
+  display:flex;align-items:baseline;
+  justify-content:space-between;margin-bottom:14px;
+}
+.sec-title{
+  font-size:16.5px;font-weight:600;
+  color:var(--gray-900);letter-spacing:-.2px;
+}
+.sec-title em{font-style:normal;color:var(--rose-500);}
+.sec-sub{font-size:12px;color:var(--gray-400);margin-top:1px;}
+.sec-act{
+  font-size:12.5px;color:var(--brown-400);font-weight:500;
+  cursor:pointer;display:flex;align-items:center;gap:4px;
+  transition:color var(--t);
+}
+.sec-act:hover{color:var(--rose-500);}
+
+/* ══ STAT CARDS ═══════════════════════════════════════════════ */
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
+}
+.stat-card{
+  background:var(--white);
+  border:1.5px solid var(--gray-100);
+  border-radius:var(--r-lg);
+  padding:18px 16px;
+  display:flex;flex-direction:column;gap:10px;
+  transition:transform var(--t),box-shadow var(--t),border-color var(--t);
+}
+.stat-card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--sh-md);border-color:var(--rose-200);
+}
+.stat-icon{
+  width:36px;height:36px;border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;
+}
+.si-rose   {background:var(--rose-50);color:var(--rose-500);}
+.si-gold   {background:var(--gold-100);color:var(--gold-400);}
+.si-brown  {background:var(--brown-100);color:var(--brown-400);}
+.si-sage   {background:var(--sage-100);color:var(--sage-500);}
+.si-blue   {background:#e8f0fe;color:#4f7ef5;}
+.stat-num{
+  font-size:30px;font-weight:600;
+  color:var(--gray-900);line-height:1;letter-spacing:-1px;
+}
+.stat-desc{font-size:12px;color:var(--gray-400);}
+.stat-delta{
+  font-size:11.5px;font-weight:500;
+  color:var(--sage-500);
+}
+.stat-delta.neg{color:var(--rose-500);}
+
+/* ══ TABLES ═══════════════════════════════════════════════════ */
+.tbl-card{
+  background:var(--white);
+  border:1.5px solid var(--gray-100);
+  border-radius:var(--r-xl);overflow:hidden;
+}
+.tbl-top{
+  padding:16px 18px;border-bottom:1px solid var(--gray-100);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead th{
+  padding:10px 16px;text-align:left;
+  font-size:10.5px;font-weight:700;
+  letter-spacing:.9px;text-transform:uppercase;
+  color:var(--gray-400);background:var(--gray-50);
+  border-bottom:1px solid var(--gray-100);white-space:nowrap;
+}
+tbody tr{
+  border-bottom:1px solid var(--gray-100);
+  transition:background var(--t);
+}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--rose-50);}
+tbody td{
+  padding:12px 16px;font-size:13px;
+  color:var(--gray-700);white-space:nowrap;
+}
+.td-id{
+  font-family:var(--font-mono);font-size:12px;
+  color:var(--brown-400);font-weight:500;
+}
+.td-bold{font-weight:500;color:var(--gray-900);}
+.td-av{display:flex;align-items:center;gap:8px;}
+.t-av{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;color:#fff;flex-shrink:0;
+}
+.av1{background:linear-gradient(135deg,var(--rose-300),var(--rose-500));}
+.av2{background:linear-gradient(135deg,#90b4fe,#4f7ef5);}
+.av3{background:linear-gradient(135deg,var(--brown-200),var(--brown-400));}
+.av4{background:linear-gradient(135deg,var(--gold-200),var(--gold-400));}
+.av5{background:linear-gradient(135deg,var(--sage-100),var(--sage-500));}
+.av6{background:linear-gradient(135deg,#fda4af,var(--rose-600));}
+.av7{background:linear-gradient(135deg,#c4b5fd,#8b5cf6);}
+.av8{background:linear-gradient(135deg,#6ee7b7,#059669);}
+
+/* Badges */
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10.5px;font-weight:600;
+  padding:3px 9px;border-radius:var(--r-pill);
+  letter-spacing:.2px;
+}
+.b-paid   {background:#e4f4e8;color:#2d8a4e;}
+.b-pending{background:var(--gold-100);color:var(--gold-500);}
+.b-unpaid {background:var(--rose-50);color:var(--rose-500);}
+.b-delivered{background:#e4f4e8;color:#2d8a4e;}
+.b-onway  {background:#e8f0fe;color:#4f7ef5;}
+.b-processing{background:var(--brown-100);color:var(--brown-400);}
+.b-ready  {background:var(--gold-100);color:var(--gold-500);}
+.b-low    {background:var(--rose-50);color:var(--rose-500);}
+.b-normal {background:var(--sage-100);color:var(--sage-500);}
+.b-ok     {background:#e4f4e8;color:#2d8a4e;}
+.b-urgent {background:#fde8e8;color:#c0392b;}
+.b-inprog {background:#e8f0fe;color:#4f7ef5;}
+.b-done   {background:#e4f4e8;color:#2d8a4e;}
+.b-scheduled{background:var(--beige);color:var(--gray-500);}
+.b-active {background:var(--sage-100);color:var(--sage-500);}
+.b-break  {background:var(--gold-100);color:var(--gold-500);}
+.b-off    {background:var(--gray-100);color:var(--gray-400);}
+.b-high   {background:var(--rose-50);color:var(--rose-500);}
+.b-medium {background:var(--gold-100);color:var(--gold-500);}
+.b-low-p  {background:var(--sage-100);color:var(--sage-500);}
+
+/* ══ PRODUCTION CARDS ═════════════════════════════════════════ */
+.prod-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:13px;
+}
+.prod-card{
+  background:var(--white);
+  border:1.5px solid var(--gray-100);
+  border-radius:var(--r-lg);
+  padding:16px 18px;
+  display:flex;flex-direction:column;gap:11px;
+  transition:transform var(--t),box-shadow var(--t),border-color var(--t);
+}
+.prod-card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--sh-md);border-color:var(--rose-200);
+}
+.pc-header{
+  display:flex;align-items:flex-start;
+  justify-content:space-between;gap:10px;
+}
+.pc-name{font-size:14px;font-weight:600;color:var(--gray-900);}
+.pc-meta{display:flex;flex-direction:column;gap:5px;}
+.pc-meta-row{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;color:var(--gray-400);
+}
+.pc-meta-row i{font-size:11px;color:var(--brown-300);width:13px;text-align:center;}
+.pc-meta-row strong{color:var(--gray-700);font-weight:500;}
+.pc-prog-row{display:flex;align-items:center;gap:9px;}
+.pc-prog-track{
+  flex:1;height:5px;
+  background:var(--gray-100);border-radius:99px;overflow:hidden;
+}
+.pc-prog-fill{
+  height:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--rose-300),var(--rose-500));
+}
+.pc-pct{font-size:11.5px;font-weight:600;color:var(--gray-500);}
+.pc-footer{
+  display:flex;align-items:center;justify-content:space-between;
+}
+
+/* ══ EMPLOYEE CARDS ═══════════════════════════════════════════ */
+.emp-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:13px;
+}
+.emp-card{
+  background:var(--white);
+  border:1.5px solid var(--gray-100);
+  border-radius:var(--r-lg);
+  padding:18px 16px;
+  display:flex;flex-direction:column;
+  align-items:center;gap:9px;text-align:center;
+  transition:transform var(--t),box-shadow var(--t),border-color var(--t);
+}
+.emp-card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--sh-md);border-color:var(--rose-200);
+}
+.emp-av-wrap{position:relative;}
+.emp-av{
+  width:48px;height:48px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:600;color:#fff;letter-spacing:.5px;
+}
+.online-dot{
+  position:absolute;bottom:1px;right:1px;
+  width:10px;height:10px;border-radius:50%;border:2px solid #fff;
+}
+.dot-active{background:#22c55e;}
+.dot-break {background:#f59e0b;}
+.dot-off   {background:var(--gray-300);}
+.emp-name{font-size:13.5px;font-weight:600;color:var(--gray-900);}
+.emp-role{font-size:11.5px;color:var(--gray-400);}
+.emp-station{font-size:12px;color:var(--gray-600);}
+.emp-hours{
+  font-family:var(--font-mono);
+  font-size:11.5px;color:var(--brown-400);
+  background:var(--brown-100);
+  padding:2px 9px;border-radius:var(--r-pill);
+}
+
+/* ══ REVIEW CARDS ═════════════════════════════════════════════ */
+.review-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:13px;
+}
+.review-card{
+  background:var(--white);
+  border:1.5px solid var(--gray-100);
+  border-radius:var(--r-lg);
+  padding:16px 18px;
+  display:flex;flex-direction:column;gap:10px;
+  transition:transform var(--t),box-shadow var(--t),border-color var(--t);
+}
+.review-card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--sh-md);border-color:var(--rose-200);
+}
+.rv-header{display:flex;align-items:center;justify-content:space-between;}
+.rv-name{font-size:13.5px;font-weight:600;color:var(--gray-900);}
+.rv-date{font-size:11px;color:var(--gray-400);}
+.stars{display:flex;gap:2px;}
+.stars i{font-size:12px;color:var(--gold-300);}
+.stars i.empty{color:var(--gray-200);}
+.rv-product{
+  font-size:11.5px;
+  background:var(--rose-50);color:var(--rose-500);
+  display:inline-block;
+  padding:2px 9px;border-radius:var(--r-pill);
+  font-weight:500;margin-bottom:2px;
+}
+.rv-text{font-size:12.5px;color:var(--gray-500);line-height:1.6;}
+
+/* ══ ANALYTICS ════════════════════════════════════════════════ */
+.analytics-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:13px;
+  margin-bottom:16px;
+}
+.an-card{
+  background:var(--white);
+  border:1.5px solid var(--gray-100);
+  border-radius:var(--r-lg);
+  padding:18px 16px;
+  transition:transform var(--t),box-shadow var(--t);
+}
+.an-card:hover{transform:translateY(-2px);box-shadow:var(--sh-md);}
+.an-label{font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--gray-400);margin-bottom:6px;}
+.an-value{
+  font-size:26px;font-weight:600;
+  color:var(--gray-900);letter-spacing:-.8px;line-height:1;margin-bottom:4px;
+}
+.an-value.gold{color:var(--gold-400);}
+.an-sub{font-size:11.5px;color:var(--gray-400);}
+.an-sub strong{color:var(--sage-500);font-weight:600;}
+
+/* CSS-only bar chart */
+.bar-chart{
+  background:var(--white);
+  border:1.5px solid var(--gray-100);
+  border-radius:var(--r-xl);
+  padding:20px;
+}
+.chart-title{font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:18px;}
+.chart-body{
+  display:flex;align-items:flex-end;
+  gap:10px;height:140px;
+}
+.bar-col{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;gap:6px;
+}
+.bar-wrap{
+  flex:1;width:100%;
+  display:flex;align-items:flex-end;
+}
+.bar{
+  width:100%;border-radius:5px 5px 0 0;
+  background:linear-gradient(180deg,var(--rose-400),var(--rose-300));
+  position:relative;
+  transition:opacity var(--t);
+  animation:growBar .8s cubic-bezier(.4,0,.2,1) forwards;
+}
+.bar:hover{opacity:.8;}
+.bar.gold-bar{background:linear-gradient(180deg,var(--gold-400),var(--gold-200));}
+.bar.today-bar{background:linear-gradient(180deg,var(--rose-600),var(--rose-400));box-shadow:0 -3px 10px rgba(200,60,80,.25);}
+@keyframes growBar{from{transform:scaleY(0);transform-origin:bottom;}to{transform:scaleY(1);}}
+.bar-label{font-size:11px;color:var(--gray-400);font-weight:500;}
+.bar-val{font-size:10px;color:var(--gray-400);font-family:var(--font-mono);}
+
+/* ══ DELIVERY CARDS ═══════════════════════════════════════════ */
+.delivery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:13px;
+}
+.delivery-card{
+  background:var(--white);
+  border:1.5px solid var(--gray-100);
+  border-radius:var(--r-lg);
+  padding:16px 18px;
+  display:flex;flex-direction:column;gap:10px;
+  transition:transform var(--t),box-shadow var(--t),border-color var(--t);
+}
+.delivery-card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--sh-md);border-color:var(--rose-200);
+}
+.delivery-card.urgent-border{border-left:3px solid var(--rose-500);}
+.delivery-card.soon-border  {border-left:3px solid var(--gold-400);}
+.delivery-card.fine-border  {border-left:3px solid var(--sage-300);}
+.dv-header{display:flex;align-items:center;justify-content:space-between;}
+.dv-name{font-size:14px;font-weight:600;color:var(--gray-900);}
+.dv-time{
+  font-family:var(--font-mono);font-size:12px;
+  background:var(--beige);color:var(--brown-400);
+  padding:2px 8px;border-radius:var(--r-pill);font-weight:500;
+}
+.dv-meta{display:flex;flex-direction:column;gap:4px;}
+.dv-meta-row{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;color:var(--gray-400);
+}
+.dv-meta-row i{font-size:11px;color:var(--rose-300);width:13px;text-align:center;}
+.dv-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:8px;border-top:1px solid var(--gray-100);
+}
+
+/* ══ TWO-COL ══════════════════════════════════════════════════ */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;}
+.col-full{grid-column:1/-1;}
+
+/* ══ FOOTER ═══════════════════════════════════════════════════ */
+.footer{
+  background:var(--white);border-top:1px solid var(--beige);
+  padding:30px 26px 22px;margin-top:8px;
+}
+.footer-inner{
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:28px;margin-bottom:24px;
+}
+.footer-brand .fw{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.footer-tagline{font-size:12.5px;color:var(--gray-400);line-height:1.65;max-width:210px;}
+.footer-ver{
+  font-size:11px;color:var(--gray-300);
+  font-family:var(--font-mono);margin-top:8px;
+}
+.footer-col-title{
+  font-size:10.5px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  color:var(--gray-400);margin-bottom:11px;
+}
+.footer-col a{
+  display:block;font-size:13px;color:var(--gray-500);
+  margin-bottom:7px;transition:color var(--t);
+}
+.footer-col a:hover{color:var(--rose-500);}
+.footer-bottom{
+  border-top:1px solid var(--gray-100);
+  padding-top:18px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.footer-copy{font-size:12px;color:var(--gray-400);line-height:1.6;}
+.footer-copy strong{color:var(--gray-600);}
+.footer-copy em{font-style:normal;color:var(--rose-500);}
+.footer-disc{font-size:11px;color:var(--gray-400);text-align:right;max-width:400px;line-height:1.55;}
+
+/* ══ RESPONSIVE ═══════════════════════════════════════════════ */
+@media(max-width:1200px){
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .analytics-grid{grid-template-columns:repeat(2,1fr);}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:1024px){
+  .two-col{grid-template-columns:1fr;}
+}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr;}
+  .sidebar{
+    position:static;height:auto;
+    border-right:none;border-bottom:1px solid var(--beige);
+    flex-direction:row;flex-wrap:wrap;
+    padding:10px 14px;gap:4px;overflow-x:auto;
+  }
+  .sb-label{display:none;}
+  .sb-link{white-space:nowrap;padding:6px 12px;}
+  .hbanner{grid-template-columns:1fr;}
+  .overview-card{max-width:100%;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .nav-search{display:none;}
+  .main{padding:16px 14px 32px;gap:20px;}
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .footer-inner{grid-template-columns:1fr;gap:16px;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;}
+  .footer-disc{text-align:left;}
+}
+@media(max-width:480px){
+  .stat-grid{grid-template-columns:1fr;}
+  .emp-grid{grid-template-columns:repeat(2,1fr);}
+  .analytics-grid{grid-template-columns:1fr;}
+}
+
+/* ══ ANIMATION ════════════════════════════════════════════════ */
+@keyframes fillProg{from{width:0}to{width:var(--tw,70%)}}
+.pc-prog-fill{animation:fillProg 1.2s cubic-bezier(.4,0,.2,1) forwards;}
+@media(prefers-reduced-motion:reduce){
+  .pc-prog-fill{animation:none;}
+  .bar{animation:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     TOP NAVIGATION
+════════════════════════════════════════ -->
+<nav class="topnav">
+  <div class="nav-logo">
+    <div class="logo-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+    <div>
+      <div class="logo-name"><em>Rose</em>Bakery</div>
+      <div class="logo-tagline">Manager</div>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <a href="#" class="active"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+    <a href="#"><i class="fa-solid fa-bag-shopping"></i> Orders</a>
+    <a href="#"><i class="fa-solid fa-cookie-bite"></i> Products</a>
+    <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+    <a href="#"><i class="fa-solid fa-users"></i> Employees</a>
+    <a href="#"><i class="fa-solid fa-heart"></i> Customers</a>
+    <a href="#"><i class="fa-solid fa-chart-simple"></i> Reports</a>
+    <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+  </div>
+
+  <div class="nav-right">
+    <div class="nav-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Search orders, products…" />
+    </div>
+    <button class="icon-btn">
+      <i class="fa-regular fa-bell"></i>
+      <span class="notif-dot"></span>
+    </button>
+    <button class="icon-btn">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+    </button>
+    <div class="av-btn">SO</div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════
+     LAYOUT
+════════════════════════════════════════ -->
+<div class="layout">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+    <div class="sb-label">Operations</div>
+    <div class="sb-link active"><i class="fa-solid fa-table-columns"></i> Dashboard Overview</div>
+    <div class="sb-link"><i class="fa-solid fa-bag-shopping"></i> Today's Orders <span class="pill">18</span></div>
+    <div class="sb-link"><i class="fa-regular fa-clock"></i> Pending Orders <span class="pill amber">6</span></div>
+    <div class="sb-link"><i class="fa-solid fa-fire-burner"></i> Production Schedule</div>
+    <div class="sb-link"><i class="fa-solid fa-boxes-stacked"></i> Inventory Status <span class="pill">3 low</span></div>
+
+    <div class="sb-label">Team</div>
+    <div class="sb-link"><i class="fa-solid fa-user-clock"></i> Employee Schedule</div>
+    <div class="sb-link"><i class="fa-solid fa-star"></i> Customer Reviews <span class="pill green">12</span></div>
+    <div class="sb-link"><i class="fa-solid fa-chart-bar"></i> Monthly Reports</div>
+  </aside>
+
+  <!-- ─── MAIN ─── -->
+  <main class="main">
+
+    <!-- ── HEADER BANNER ── -->
+    <section class="hbanner">
+      <div>
+        <div class="greet-eyebrow">Thursday, 19 June 2025 — Morning Shift</div>
+        <h1 class="greet-name">Good morning, Sarah.</h1>
+        <p class="greet-sub">The bakery opens in <strong>45 minutes</strong>. 4 production batches are in progress.</p>
+      </div>
+      <div class="overview-card">
+        <div class="ov-eyebrow">Today's Overview</div>
+        <div class="ov-grid">
+          <div class="ov-item">
+            <div class="label">Today's Sales</div>
+            <div class="value pink">Rp 4.2M</div>
+            <div class="sub">+12% vs yesterday</div>
+          </div>
+          <div class="ov-item">
+            <div class="label">Today's Orders</div>
+            <div class="value">18</div>
+            <div class="sub">6 pending</div>
+          </div>
+          <div class="ov-divider"></div>
+          <div class="ov-item">
+            <div class="label">Production</div>
+            <div class="value brown">72%</div>
+            <div class="sub">4 batches active</div>
+          </div>
+          <div class="ov-item">
+            <div class="label">Current Shift</div>
+            <div class="value" style="font-size:14px;padding-top:3px">
+              <span class="shift-badge"><i class="fa-solid fa-sun"></i> Morning</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 1: BUSINESS SUMMARY ── -->
+    <section>
+      <div class="sec-hdr">
+        <div>
+          <div class="sec-title">Business <em>Summary</em></div>
+          <div class="sec-sub">Real-time snapshot for June 19, 2025</div>
+        </div>
+        <span class="sec-act">View reports <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon si-rose"><i class="fa-solid fa-bag-shopping"></i></div>
+          <div>
+            <div class="stat-num">18</div>
+            <div class="stat-desc">Today's Orders</div>
+          </div>
+          <div class="stat-delta">+3 from yesterday</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-gold"><i class="fa-solid fa-coins"></i></div>
+          <div>
+            <div class="stat-num">4.2M</div>
+            <div class="stat-desc">Total Revenue (IDR)</div>
+          </div>
+          <div class="stat-delta">+12% vs avg</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-brown"><i class="fa-solid fa-cookie-bite"></i></div>
+          <div>
+            <div class="stat-num">247</div>
+            <div class="stat-desc">Products Sold</div>
+          </div>
+          <div class="stat-delta">+28 vs yesterday</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-sage"><i class="fa-solid fa-truck"></i></div>
+          <div>
+            <div class="stat-num">5</div>
+            <div class="stat-desc">Pending Deliveries</div>
+          </div>
+          <div class="stat-delta neg">2 urgent</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 2: RECENT ORDERS ── -->
+    <section>
+      <div class="sec-hdr">
+        <div>
+          <div class="sec-title">Recent <em>Orders</em></div>
+          <div class="sec-sub">18 orders today — updated 2 minutes ago</div>
+        </div>
+        <span class="sec-act">All orders <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <div class="tbl-card">
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Products</th>
+                <th>Order Time</th>
+                <th>Payment</th>
+                <th>Delivery</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-id">#RB-0619-001</td>
+                <td><div class="td-av"><div class="t-av av1">DP</div><span class="td-bold">Dewi Purnama</span></div></td>
+                <td>Sourdough Loaf × 2, Croissant × 4</td>
+                <td>07:14 AM</td>
+                <td><span class="badge b-paid">Paid</span></td>
+                <td><span class="badge b-delivered">Delivered</span></td>
+              </tr>
+              <tr>
+                <td class="td-id">#RB-0619-002</td>
+                <td><div class="td-av"><div class="t-av av2">RH</div><span class="td-bold">Rizky Hartono</span></div></td>
+                <td>Birthday Cake (Custom) × 1</td>
+                <td>07:45 AM</td>
+                <td><span class="badge b-paid">Paid</span></td>
+                <td><span class="badge b-onway">On the Way</span></td>
+              </tr>
+              <tr>
+                <td class="td-id">#RB-0619-003</td>
+                <td><div class="td-av"><div class="t-av av3">SA</div><span class="td-bold">Siti Aulia</span></div></td>
+                <td>Cinnamon Roll × 6, Lemon Tart × 3</td>
+                <td>08:02 AM</td>
+                <td><span class="badge b-pending">Pending</span></td>
+                <td><span class="badge b-processing">Processing</span></td>
+              </tr>
+              <tr>
+                <td class="td-id">#RB-0619-004</td>
+                <td><div class="td-av"><div class="t-av av4">BW</div><span class="td-bold">Budi Wijaya</span></div></td>
+                <td>Focaccia Bread × 1, Bagel × 4</td>
+                <td>08:18 AM</td>
+                <td><span class="badge b-paid">Paid</span></td>
+                <td><span class="badge b-ready">Ready for Pickup</span></td>
+              </tr>
+              <tr>
+                <td class="td-id">#RB-0619-005</td>
+                <td><div class="td-av"><div class="t-av av5">NR</div><span class="td-bold">Nadia Rahayu</span></div></td>
+                <td>Macarons Box × 2, Éclair × 8</td>
+                <td>08:35 AM</td>
+                <td><span class="badge b-unpaid">Unpaid</span></td>
+                <td><span class="badge b-processing">Processing</span></td>
+              </tr>
+              <tr>
+                <td class="td-id">#RB-0619-006</td>
+                <td><div class="td-av"><div class="t-av av6">FA</div><span class="td-bold">Farida Anita</span></div></td>
+                <td>Brioche Loaf × 2, Pain au Chocolat × 3</td>
+                <td>08:50 AM</td>
+                <td><span class="badge b-paid">Paid</span></td>
+                <td><span class="badge b-onway">On the Way</span></td>
+              </tr>
+              <tr>
+                <td class="td-id">#RB-0619-007</td>
+                <td><div class="td-av"><div class="t-av av7">HP</div><span class="td-bold">Hendra Putra</span></div></td>
+                <td>Wedding Cake Tier 2 × 1</td>
+                <td>09:10 AM</td>
+                <td><span class="badge b-paid">Paid</span></td>
+                <td><span class="badge b-processing">Processing</span></td>
+              </tr>
+              <tr>
+                <td class="td-id">#RB-0619-008</td>
+                <td><div class="td-av"><div class="t-av av8">YS</div><span class="td-bold">Yuni Santoso</span></div></td>
+                <td>Banana Bread × 3, Cookies Assorted × 12</td>
+                <td>09:22 AM</td>
+                <td><span class="badge b-pending">Pending</span></td>
+                <td><span class="badge b-scheduled">Scheduled</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 3: PRODUCTION SCHEDULE ── -->
+    <section>
+      <div class="sec-hdr">
+        <div>
+          <div class="sec-title">Production <em>Schedule</em></div>
+          <div class="sec-sub">Morning shift — 4 batches active</div>
+        </div>
+        <span class="sec-act">Full schedule <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <div class="prod-grid">
+
+        <div class="prod-card">
+          <div class="pc-header">
+            <div class="pc-name">Classic Sourdough Loaf</div>
+            <span class="badge b-inprog">In Progress</span>
+          </div>
+          <div class="pc-meta">
+            <div class="pc-meta-row"><i class="fa-solid fa-layer-group"></i> <strong>Qty:</strong> 24 loaves</div>
+            <div class="pc-meta-row"><i class="fa-solid fa-user-tie"></i> <strong>Baker:</strong> Pak Suherman</div>
+            <div class="pc-meta-row"><i class="fa-regular fa-clock"></i> Finish est. 10:30 AM</div>
+          </div>
+          <div class="pc-prog-row">
+            <div class="pc-prog-track"><div class="pc-prog-fill" style="--tw:78%"></div></div>
+            <span class="pc-pct">78%</span>
+          </div>
+          <div class="pc-footer">
+            <span class="badge b-high">High Priority</span>
+            <span style="font-size:11.5px;color:var(--gray-400)">Oven 1</span>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="pc-header">
+            <div class="pc-name">Butter Croissants</div>
+            <span class="badge b-inprog">In Progress</span>
+          </div>
+          <div class="pc-meta">
+            <div class="pc-meta-row"><i class="fa-solid fa-layer-group"></i> <strong>Qty:</strong> 60 pieces</div>
+            <div class="pc-meta-row"><i class="fa-solid fa-user-tie"></i> <strong>Baker:</strong> Bu Ratna</div>
+            <div class="pc-meta-row"><i class="fa-regular fa-clock"></i> Finish est. 09:45 AM</div>
+          </div>
+          <div class="pc-prog-row">
+            <div class="pc-prog-track"><div class="pc-prog-fill" style="--tw:90%"></div></div>
+            <span class="pc-pct">90%</span>
+          </div>
+          <div class="pc-footer">
+            <span class="badge b-high">High Priority</span>
+            <span style="font-size:11.5px;color:var(--gray-400)">Oven 2</span>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="pc-header">
+            <div class="pc-name">Custom Birthday Cake</div>
+            <span class="badge b-inprog">In Progress</span>
+          </div>
+          <div class="pc-meta">
+            <div class="pc-meta-row"><i class="fa-solid fa-layer-group"></i> <strong>Qty:</strong> 1 tier cake</div>
+            <div class="pc-meta-row"><i class="fa-solid fa-user-tie"></i> <strong>Baker:</strong> Bu Dewi (Decorator)</div>
+            <div class="pc-meta-row"><i class="fa-regular fa-clock"></i> Finish est. 11:00 AM</div>
+          </div>
+          <div class="pc-prog-row">
+            <div class="pc-prog-track"><div class="pc-prog-fill" style="--tw:55%"></div></div>
+            <span class="pc-pct">55%</span>
+          </div>
+          <div class="pc-footer">
+            <span class="badge b-high">High Priority</span>
+            <span style="font-size:11.5px;color:var(--gray-400)">Decoration Station</span>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="pc-header">
+            <div class="pc-name">Cinnamon Rolls</div>
+            <span class="badge b-scheduled">Scheduled</span>
+          </div>
+          <div class="pc-meta">
+            <div class="pc-meta-row"><i class="fa-solid fa-layer-group"></i> <strong>Qty:</strong> 36 rolls</div>
+            <div class="pc-meta-row"><i class="fa-solid fa-user-tie"></i> <strong>Baker:</strong> Pak Joko</div>
+            <div class="pc-meta-row"><i class="fa-regular fa-clock"></i> Start at 10:00 AM</div>
+          </div>
+          <div class="pc-prog-row">
+            <div class="pc-prog-track"><div class="pc-prog-fill" style="--tw:0%"></div></div>
+            <span class="pc-pct">0%</span>
+          </div>
+          <div class="pc-footer">
+            <span class="badge b-medium">Medium Priority</span>
+            <span style="font-size:11.5px;color:var(--gray-400)">Oven 3</span>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="pc-header">
+            <div class="pc-name">Lemon Tarts</div>
+            <span class="badge b-done">Completed</span>
+          </div>
+          <div class="pc-meta">
+            <div class="pc-meta-row"><i class="fa-solid fa-layer-group"></i> <strong>Qty:</strong> 24 tarts</div>
+            <div class="pc-meta-row"><i class="fa-solid fa-user-tie"></i> <strong>Baker:</strong> Bu Sari</div>
+            <div class="pc-meta-row"><i class="fa-regular fa-clock"></i> Completed 08:20 AM</div>
+          </div>
+          <div class="pc-prog-row">
+            <div class="pc-prog-track"><div class="pc-prog-fill" style="--tw:100%"></div></div>
+            <span class="pc-pct">100%</span>
+          </div>
+          <div class="pc-footer">
+            <span class="badge b-low-p">Low Priority</span>
+            <span style="font-size:11.5px;color:var(--gray-400)">Pastry Station</span>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="pc-header">
+            <div class="pc-name">Brioche Loaves</div>
+            <span class="badge b-inprog">In Progress</span>
+          </div>
+          <div class="pc-meta">
+            <div class="pc-meta-row"><i class="fa-solid fa-layer-group"></i> <strong>Qty:</strong> 12 loaves</div>
+            <div class="pc-meta-row"><i class="fa-solid fa-user-tie"></i> <strong>Baker:</strong> Pak Suherman</div>
+            <div class="pc-meta-row"><i class="fa-regular fa-clock"></i> Finish est. 11:30 AM</div>
+          </div>
+          <div class="pc-prog-row">
+            <div class="pc-prog-track"><div class="pc-prog-fill" style="--tw:40%"></div></div>
+            <span class="pc-pct">40%</span>
+          </div>
+          <div class="pc-footer">
+            <span class="badge b-medium">Medium Priority</span>
+            <span style="font-size:11.5px;color:var(--gray-400)">Oven 1</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── SECTION 4: INVENTORY ── -->
+    <section>
+      <div class="sec-hdr">
+        <div>
+          <div class="sec-title">Inventory <em>Management</em></div>
+          <div class="sec-sub">3 ingredients below minimum stock threshold</div>
+        </div>
+        <span class="sec-act">Restock all <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <div class="tbl-card">
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ingredient</th>
+                <th>Current Stock</th>
+                <th>Min. Stock</th>
+                <th>Supplier</th>
+                <th>Restock Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="td-av"><div class="stat-icon si-brown" style="width:26px;height:26px;border-radius:6px;font-size:11px;margin-right:4px"><i class="fa-solid fa-wheat-awn"></i></div><span class="td-bold">Bread Flour (High Protein)</span></div></td>
+                <td><span style="font-family:var(--font-mono);font-size:13px;font-weight:500">48 kg</span></td>
+                <td>20 kg</td>
+                <td>PT Bogasari Mills</td>
+                <td><span class="badge b-ok">Sufficient</span></td>
+              </tr>
+              <tr>
+                <td><div class="td-av"><div class="stat-icon si-gold" style="width:26px;height:26px;border-radius:6px;font-size:11px;margin-right:4px"><i class="fa-solid fa-droplet"></i></div><span class="td-bold">Unsalted Butter</span></div></td>
+                <td><span style="font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--rose-500)">3.5 kg</span></td>
+                <td>5 kg</td>
+                <td>CV Segar Dairy</td>
+                <td><span class="badge b-low">Low — Restock Now</span></td>
+              </tr>
+              <tr>
+                <td><div class="td-av"><div class="stat-icon si-rose" style="width:26px;height:26px;border-radius:6px;font-size:11px;margin-right:4px"><i class="fa-solid fa-egg"></i></div><span class="td-bold">Fresh Eggs (Grade A)</span></div></td>
+                <td><span style="font-family:var(--font-mono);font-size:13px;font-weight:500">180 pcs</span></td>
+                <td>100 pcs</td>
+                <td>Pak Tani Farm</td>
+                <td><span class="badge b-ok">Sufficient</span></td>
+              </tr>
+              <tr>
+                <td><div class="td-av"><div class="stat-icon si-gold" style="width:26px;height:26px;border-radius:6px;font-size:11px;margin-right:4px"><i class="fa-solid fa-cube"></i></div><span class="td-bold">Refined Sugar</span></div></td>
+                <td><span style="font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--gold-500)">8 kg</span></td>
+                <td>10 kg</td>
+                <td>PT Rajawali Sugar</td>
+                <td><span class="badge b-ready">Reorder Placed</span></td>
+              </tr>
+              <tr>
+                <td><div class="td-av"><div class="stat-icon si-sage" style="width:26px;height:26px;border-radius:6px;font-size:11px;margin-right:4px"><i class="fa-solid fa-jar"></i></div><span class="td-bold">Active Dry Yeast</span></div></td>
+                <td><span style="font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--rose-500)">0.4 kg</span></td>
+                <td>1 kg</td>
+                <td>CV Kimia Farma Food</td>
+                <td><span class="badge b-urgent">Critical — Order Now</span></td>
+              </tr>
+              <tr>
+                <td><div class="td-av"><div class="stat-icon si-brown" style="width:26px;height:26px;border-radius:6px;font-size:11px;margin-right:4px"><i class="fa-solid fa-mug-hot"></i></div><span class="td-bold">Cocoa Powder</span></div></td>
+                <td><span style="font-family:var(--font-mono);font-size:13px;font-weight:500">6.2 kg</span></td>
+                <td>3 kg</td>
+                <td>Cargill Cocoa Indo</td>
+                <td><span class="badge b-ok">Sufficient</span></td>
+              </tr>
+              <tr>
+                <td><div class="td-av"><div class="stat-icon si-rose" style="width:26px;height:26px;border-radius:6px;font-size:11px;margin-right:4px"><i class="fa-solid fa-bottle-water"></i></div><span class="td-bold">Full Cream Milk</span></div></td>
+                <td><span style="font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--gold-500)">4.8 L</span></td>
+                <td>5 L</td>
+                <td>Frisian Flag</td>
+                <td><span class="badge b-low">Low — Restock Now</span></td>
+              </tr>
+              <tr>
+                <td><div class="td-av"><div class="stat-icon si-gold" style="width:26px;height:26px;border-radius:6px;font-size:11px;margin-right:4px"><i class="fa-solid fa-snowflake"></i></div><span class="td-bold">Cream Cheese</span></div></td>
+                <td><span style="font-family:var(--font-mono);font-size:13px;font-weight:500">2.5 kg</span></td>
+                <td>2 kg</td>
+                <td>Anchor Food Pro</td>
+                <td><span class="badge b-ok">Sufficient</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 5: EMPLOYEES ── -->
+    <section>
+      <div class="sec-hdr">
+        <div>
+          <div class="sec-title">Employee <em>Schedule</em></div>
+          <div class="sec-sub">Morning shift — 7 staff on duty</div>
+        </div>
+        <span class="sec-act">Full schedule <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <div class="emp-grid">
+
+        <div class="emp-card">
+          <div class="emp-av-wrap">
+            <div class="emp-av av1">SH</div>
+            <span class="online-dot dot-active"></span>
+          </div>
+          <div class="emp-name">Suherman Bakri</div>
+          <div class="emp-role">Head Baker</div>
+          <div class="emp-station">Oven Station 1</div>
+          <div class="emp-hours">06:00 – 14:00</div>
+          <span class="badge b-active">Active</span>
+        </div>
+
+        <div class="emp-card">
+          <div class="emp-av-wrap">
+            <div class="emp-av av3">RN</div>
+            <span class="online-dot dot-active"></span>
+          </div>
+          <div class="emp-name">Ratna Ningrum</div>
+          <div class="emp-role">Pastry Chef</div>
+          <div class="emp-station">Pastry Station</div>
+          <div class="emp-hours">06:00 – 14:00</div>
+          <span class="badge b-active">Active</span>
+        </div>
+
+        <div class="emp-card">
+          <div class="emp-av-wrap">
+            <div class="emp-av av5">DK</div>
+            <span class="online-dot dot-active"></span>
+          </div>
+          <div class="emp-name">Dewi Kusuma</div>
+          <div class="emp-role">Cake Decorator</div>
+          <div class="emp-station">Decoration Station</div>
+          <div class="emp-hours">07:00 – 15:00</div>
+          <span class="badge b-active">Active</span>
+        </div>
+
+        <div class="emp-card">
+          <div class="emp-av-wrap">
+            <div class="emp-av av4">JP</div>
+            <span class="online-dot dot-break"></span>
+          </div>
+          <div class="emp-name">Joko Prasetyo</div>
+          <div class="emp-role">Baker Asst.</div>
+          <div class="emp-station">Oven Station 3</div>
+          <div class="emp-hours">06:00 – 14:00</div>
+          <span class="badge b-break">On Break</span>
+        </div>
+
+        <div class="emp-card">
+          <div class="emp-av-wrap">
+            <div class="emp-av av6">SR</div>
+            <span class="online-dot dot-active"></span>
+          </div>
+          <div class="emp-name">Sari Rahayu</div>
+          <div class="emp-role">Cashier</div>
+          <div class="emp-station">Front Desk</div>
+          <div class="emp-hours">08:00 – 16:00</div>
+          <span class="badge b-active">Active</span>
+        </div>
+
+        <div class="emp-card">
+          <div class="emp-av-wrap">
+            <div class="emp-av av2">AP</div>
+            <span class="online-dot dot-active"></span>
+          </div>
+          <div class="emp-name">Agus Permana</div>
+          <div class="emp-role">Delivery Driver</div>
+          <div class="emp-station">Delivery Route A</div>
+          <div class="emp-hours">08:00 – 16:00</div>
+          <span class="badge b-onway">On Route</span>
+        </div>
+
+        <div class="emp-card">
+          <div class="emp-av-wrap">
+            <div class="emp-av av7">TW</div>
+            <span class="online-dot dot-off"></span>
+          </div>
+          <div class="emp-name">Taufik Wicaksono</div>
+          <div class="emp-role">Kitchen Helper</div>
+          <div class="emp-station">Prep Area</div>
+          <div class="emp-hours">10:00 – 18:00</div>
+          <span class="badge b-off">Not Yet In</span>
+        </div>
+
+        <div class="emp-card">
+          <div class="emp-av-wrap">
+            <div class="emp-av av8">LH</div>
+            <span class="online-dot dot-active"></span>
+          </div>
+          <div class="emp-name">Lina Hartati</div>
+          <div class="emp-role">Barista / Cafe</div>
+          <div class="emp-station">Cafe Counter</div>
+          <div class="emp-hours">07:00 – 15:00</div>
+          <span class="badge b-active">Active</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── SECTION 6 + 7: REVIEWS + ANALYTICS (two-col) ── -->
+    <div class="two-col">
+
+      <!-- Customer Reviews -->
+      <section>
+        <div class="sec-hdr">
+          <div>
+            <div class="sec-title">Customer <em>Reviews</em></div>
+            <div class="sec-sub">12 new reviews this week</div>
+          </div>
+          <span class="sec-act">All reviews <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+        <div class="review-grid" style="grid-template-columns:1fr">
+
+          <div class="review-card">
+            <div class="rv-header">
+              <div class="td-av"><div class="t-av av1">DP</div><span class="rv-name">Dewi Purnama</span></div>
+              <span class="rv-date">Jun 18, 2025</span>
+            </div>
+            <div class="stars">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <span class="rv-product">Sourdough Loaf</span>
+            <p class="rv-text">Crust is perfect — crackling with great chew. The fermentation taste is exactly how I like it. Will definitely order again for the whole week.</p>
+          </div>
+
+          <div class="review-card">
+            <div class="rv-header">
+              <div class="td-av"><div class="t-av av4">BW</div><span class="rv-name">Budi Wijaya</span></div>
+              <span class="rv-date">Jun 17, 2025</span>
+            </div>
+            <div class="stars">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star empty"></i>
+            </div>
+            <span class="rv-product">Butter Croissant</span>
+            <p class="rv-text">Flaky and buttery, just the way a good croissant should be. The lamination layers are visible — impressive skill. Slightly large but no complaints.</p>
+          </div>
+
+          <div class="review-card">
+            <div class="rv-header">
+              <div class="td-av"><div class="t-av av6">FA</div><span class="rv-name">Farida Anita</span></div>
+              <span class="rv-date">Jun 16, 2025</span>
+            </div>
+            <div class="stars">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <span class="rv-product">Birthday Cake (Custom)</span>
+            <p class="rv-text">The decoration exceeded my expectations. The roses on the cake were hand-piped beautifully. Taste was moist and not overly sweet. Everyone at the party loved it.</p>
+          </div>
+
+          <div class="review-card">
+            <div class="rv-header">
+              <div class="td-av"><div class="t-av av2">RH</div><span class="rv-name">Rizky Hartono</span></div>
+              <span class="rv-date">Jun 15, 2025</span>
+            </div>
+            <div class="stars">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star empty"></i><i class="fa-regular fa-star empty"></i>
+            </div>
+            <span class="rv-product">Cinnamon Roll</span>
+            <p class="rv-text">Good flavor, but the glaze was lighter than expected. Still enjoyable warm. Delivery arrived on time which was great. Would try the classic version next time.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Sales Analytics -->
+      <section>
+        <div class="sec-hdr">
+          <div>
+            <div class="sec-title">Sales <em>Analytics</em></div>
+            <div class="sec-sub">Weekly performance — June 2025</div>
+          </div>
+        </div>
+        <div class="analytics-grid" style="grid-template-columns:1fr 1fr;margin-bottom:14px">
+          <div class="an-card">
+            <div class="an-label">Weekly Revenue</div>
+            <div class="an-value gold">Rp 28.4M</div>
+            <div class="an-sub"><strong>+8.2%</strong> vs last week</div>
+          </div>
+          <div class="an-card">
+            <div class="an-label">Monthly Revenue</div>
+            <div class="an-value">Rp 112M</div>
+            <div class="an-sub"><strong>+5.1%</strong> vs May</div>
+          </div>
+          <div class="an-card">
+            <div class="an-label">Best Seller</div>
+            <div class="an-value" style="font-size:17px;letter-spacing:0;padding-top:2px">Sourdough Loaf</div>
+            <div class="an-sub">38% of daily sales</div>
+          </div>
+          <div class="an-card">
+            <div class="an-label">Avg Daily Orders</div>
+            <div class="an-value">16.3</div>
+            <div class="an-sub"><strong>+2.1</strong> vs last week</div>
+          </div>
+        </div>
+
+        <div class="bar-chart">
+          <div class="chart-title">Daily Revenue This Week (× Rp 1,000)</div>
+          <div class="chart-body">
+            <div class="bar-col">
+              <div class="bar-wrap"><div class="bar" style="height:60%;animation-delay:.05s"></div></div>
+              <div class="bar-val">3.5M</div>
+              <div class="bar-label">Mon</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-wrap"><div class="bar" style="height:72%;animation-delay:.1s"></div></div>
+              <div class="bar-val">4.1M</div>
+              <div class="bar-label">Tue</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-wrap"><div class="bar gold-bar" style="height:85%;animation-delay:.15s"></div></div>
+              <div class="bar-val">4.8M</div>
+              <div class="bar-label">Wed</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-wrap"><div class="bar" style="height:65%;animation-delay:.2s"></div></div>
+              <div class="bar-val">3.7M</div>
+              <div class="bar-label">Thu</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-wrap"><div class="bar today-bar" style="height:74%;animation-delay:.25s"></div></div>
+              <div class="bar-val">4.2M</div>
+              <div class="bar-label">Today</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-wrap"><div class="bar" style="height:90%;opacity:.3;animation-delay:.3s"></div></div>
+              <div class="bar-val" style="color:var(--gray-200)">—</div>
+              <div class="bar-label">Sat</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-wrap"><div class="bar" style="height:100%;opacity:.3;animation-delay:.35s"></div></div>
+              <div class="bar-val" style="color:var(--gray-200)">—</div>
+              <div class="bar-label">Sun</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ── SECTION 8: UPCOMING DELIVERIES ── -->
+    <section>
+      <div class="sec-hdr">
+        <div>
+          <div class="sec-title">Upcoming <em>Deliveries</em></div>
+          <div class="sec-sub">5 deliveries scheduled today — 2 urgent</div>
+        </div>
+        <span class="sec-act">All deliveries <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <div class="delivery-grid">
+
+        <div class="delivery-card urgent-border">
+          <div class="dv-header">
+            <div class="td-av"><div class="t-av av2">RH</div><span class="dv-name">Rizky Hartono</span></div>
+            <span class="dv-time">10:00 AM</span>
+          </div>
+          <div class="dv-meta">
+            <div class="dv-meta-row"><i class="fa-solid fa-location-dot"></i> Jl. Sudirman No. 14, Menteng</div>
+            <div class="dv-meta-row"><i class="fa-solid fa-cookie-bite"></i> Birthday Cake (Custom) × 1</div>
+            <div class="dv-meta-row"><i class="fa-solid fa-user"></i> Courier: Agus Permana</div>
+          </div>
+          <div class="dv-footer">
+            <span class="badge b-onway">En Route</span>
+            <span class="badge b-urgent">Urgent</span>
+          </div>
+        </div>
+
+        <div class="delivery-card urgent-border">
+          <div class="dv-header">
+            <div class="td-av"><div class="t-av av6">FA</div><span class="dv-name">Farida Anita</span></div>
+            <span class="dv-time">10:30 AM</span>
+          </div>
+          <div class="dv-meta">
+            <div class="dv-meta-row"><i class="fa-solid fa-location-dot"></i> Jl. Kemang Raya Blok C No. 5</div>
+            <div class="dv-meta-row"><i class="fa-solid fa-cookie-bite"></i> Brioche Loaf × 2, Pain au Chocolat × 3</div>
+            <div class="dv-meta-row"><i class="fa-solid fa-user"></i> Courier: Taufik Wicaksono</div>
+          </div>
+          <div class="dv-footer">
+            <span class="badge b-processing">Preparing</span>
+            <span class="badge b-urgent">Urgent</span>
+          </div>
+        </div>
+
+        <div class="delivery-card soon-border">
+          <div class="dv-header">
+            <div class="td-av"><div class="t-av av7">HP</div><span class="dv-name">Hendra Putra</span></div>
+            <span class="dv-time">01:00 PM</span>
+          </div>
+          <div class="dv-meta">
+            <div class="dv-meta-row"><i class="fa-solid fa-location-dot"></i> Jl. Pondok Indah Raya No. 88</div>
+            <div class="dv-meta-row"><i class="fa-solid fa-cookie-bite"></i> Wedding Cake Tier 2 × 1</div>
+            <div class="dv-meta-row"><i class="fa-solid fa-user"></i> Courier: Agus Permana</div>
+          </div>
+          <div class="dv-footer">
+            <span class="badge b-processing">Baking</span>
+            <span class="badge b-medium">Scheduled</span>
+          </div>
+        </div>
+
+        <div class="delivery-card soon-border">
+          <div class="dv-header">
+            <div class="td-av"><div class="t-av av3">SA</div><span class="dv-name">Siti Aulia</span></div>
+            <span class="dv-time">02:00 PM</span>
+          </div>
+          <div class="dv-meta">
+            <div class="dv-meta-row"><i class="fa-solid fa-location-dot"></i> Jl. Tebet Barat Dalam No. 21</div>
+            <div class="dv-meta-row"><i class="fa-solid fa-cookie-bite"></i> Cinnamon Roll × 6, Lemon Tart × 3</div>
+            <div class="dv-meta-row"><i class="fa-solid fa-user"></i> Courier: TBD</div>
+          </div>
+          <div class="dv-footer">
+            <span class="badge b-scheduled">Scheduled</span>
+            <span class="badge b-medium">On Time</span>
+          </div>
+        </div>
+
+        <div class="delivery-card fine-border">
+          <div class="dv-header">
+            <div class="td-av"><div class="t-av av8">YS</div><span class="dv-name">Yuni Santoso</span></div>
+            <span class="dv-time">04:30 PM</span>
+          </div>
+          <div class="dv-meta">
+            <div class="dv-meta-row"><i class="fa-solid fa-location-dot"></i> Jl. Cipete Raya No. 47</div>
+            <div class="dv-meta-row"><i class="fa-solid fa-cookie-bite"></i> Banana Bread × 3, Cookies Box × 12</div>
+            <div class="dv-meta-row"><i class="fa-solid fa-user"></i> Courier: TBD</div>
+          </div>
+          <div class="dv-footer">
+            <span class="badge b-scheduled">Scheduled</span>
+            <span class="badge b-low-p">Flexible</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="fw">
+        <div class="logo-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+        <div>
+          <div class="logo-name"><em>Rose</em>Bakery</div>
+          <div class="logo-tagline">Manager</div>
+        </div>
+      </div>
+      <div class="footer-tagline">Freshly Baked. Perfectly Managed. The complete operations platform for artisan bakeries.</div>
+      <div class="footer-ver">v1.0.0 — Bakery Edition</div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Quick Links</div>
+      <a href="#">Dashboard</a>
+      <a href="#">Today's Orders</a>
+      <a href="#">Production</a>
+      <a href="#">Inventory</a>
+      <a href="#">Reports</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Support</div>
+      <a href="#">Help Center</a>
+      <a href="#">User Guide</a>
+      <a href="#">FAQ</a>
+      <a href="#">Contact Support</a>
+      <a href="#">Send Feedback</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Legal</div>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms &amp; Conditions</a>
+      <a href="#">Cookie Policy</a>
+      <a href="#">Data Usage</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">
+      &copy; 2025 <strong>RoseBakery Manager</strong>. Designed &amp; Developed by <em>Sabillah Okta Ramadhani</em>.
+    </div>
+    <div class="footer-disc">
+      This is a fictional bakery management dashboard created as a Computer Programming Final Project. All data shown is for demonstration purposes only.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
